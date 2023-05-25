@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tests</title>
+</head>
+<body>
+    <h1>Choose the right options:</h1>
+
+    <form id="tests_container" action="/submit" method="post">
+
+            {% for question in questions %}
+            <h3>{{ question.title }}</h3>
+            {% for option in question.options %}
+            <input type="radio" name="{{ question.id }}" value="{{ option.id }}"> {{ option.label }}<br>
+            {% endfor %}
+            {% endfor %}
+
+            <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById("tests_container").addEventListener('submit', function(event) {
+            var form = document.getElementById("tests_container")
+            var answers = {};
+
+            {% for question in questions %}
+            var selectedOption = getSelectedOption('{{ question.id }}');
+            answers['{{ question.id }}'] = selectedOption;
+            {% endfor %}
+
+            console.log(answers)
+
+            // form.action = form.action + '?' + Object.entries(answers).map(([key, value]) => key + '=' + value).join('&');
+            var queryString = Object.entries(answers).map(([key, value]) => key + '=' + value).join('&');
+            form.action = form.action + '?' + queryString;
+
+            form.submit();
+        });
+
+        function getSelectedOption(questionName) {
+            var selectedOption = document.querySelector('input[name="' + questionName + '"]:checked');
+            if (selectedOption) {
+                console.log(selectedOption.getAttribute('value'))
+                return selectedOption.getAttribute('value');
+            }
+            return null;
+        }
+    </script>
+</body>
+</html>
