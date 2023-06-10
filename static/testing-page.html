@@ -8,44 +8,14 @@
     <h1>Choose the right options:</h1>
 
     <form id="tests_container" action="/submit" method="post">
+        {% for qid, question in questions.items() %}
+        <h3>{{ question['question-text'] }}</h3>
+        {% for oid, option in question['options'].items() %}
+        <input type="radio" name="{{ qid }}" value="{{ oid }}"> {{ option }}<br>
+        {% endfor %}
+        {% endfor %}
 
-            {% for qid, question in questions.items() %}
-            <h3>{{ question['question-text'] }}</h3>
-            {% for oid, option in question['options'].items() %}
-            <input type="radio" name="{{ qid }}" value="{{ oid }}"> {{ option }}<br>
-            {% endfor %}
-            {% endfor %}
-
-            <button type="submit">Submit</button>
+        <button type="submit">Submit</button>
     </form>
-
-    <script>
-        // document.getElementById("tests_container").addEventListener('submit', function(event) {
-        //     var form = document.getElementById("tests_container")
-        //     var answers = {};
-        //
-        //     {% for question in questions %}
-        //     var selectedOption = getSelectedOption('{{ question.id }}');
-        //     answers['{{ question.id }}'] = selectedOption;
-        //     {% endfor %}
-        //
-        //     console.log(answers)
-        //
-        //     // form.action = form.action + '?' + Object.entries(answers).map(([key, value]) => key + '=' + value).join('&');
-        //     var queryString = Object.entries(answers).map(([key, value]) => key + '=' + value).join('&');
-        //     form.action = "/submit" + '?' + queryString;
-        //
-        //     form.submit();
-        // });
-        //
-        // function getSelectedOption(questionName) {
-        //     var selectedOption = document.querySelector('input[name="' + questionName + '"]:checked');
-        //     if (selectedOption) {
-        //         console.log(selectedOption.getAttribute('value'))
-        //         return selectedOption.getAttribute('value');
-        //     }
-        //     return null;
-        // }
-    </script>
 </body>
 </html>
